@@ -22,7 +22,7 @@ The first method defined by `SupportsStoredPaymentMethodsInterface` is `createPa
 This method is called during the checkout process, when the *Payment Information* form is submitted. It is responsible for validating payment details, updating information on the remote payment gateway as needed, and saving payment method details locally.
 
 #### Customizing the payment method add form
-When a payment gateway implements the `SupportsStoredPaymentMethodsInterface` interface, the `PaymentMethodAddForm` is used for collecting all information required for creating the payment method. You can create your own payment method add form by extending `Drupal\commerce_payment\PluginForm\PaymentMethodAddForm` with your own `Drupal\my_custom_gateway\PluginForm\PaymentMethodAddForm` class. In your payment gateway plugin annotation, you will need to include your custom form as the `add-payment-method` form. For example, the [Commerce Braintree module] has a custom payment method add form for its Hosted Fields payment gateway:
+When a payment gateway implements the `SupportsStoredPaymentMethodsInterface` interface, the `PaymentMethodAddForm` is used for collecting all information required for creating the payment method. You can create your own payment method add form by extending `Drupal\commerce_payment\Plugin\Form\PaymentMethodAddForm` with your own `Drupal\my_custom_gateway\Plugin\Form\PaymentMethodAddForm` class. In your payment gateway plugin annotation, you will need to include your custom form as the `add-payment-method` form. For example, the [Commerce Braintree module] has a custom payment method add form for its Hosted Fields payment gateway:
 
 ```php
 /**
@@ -33,13 +33,13 @@ When a payment gateway implements the `SupportsStoredPaymentMethodsInterface` in
  *   label = "Braintree (Hosted Fields)",
  *   display_label = "Braintree",
  *   forms = {
- *     "add-payment-method" = "Drupal\commerce_braintree\PluginForm\HostedFields\PaymentMethodAddForm",
+ *     "add-payment-method" = "Drupal\commerce_braintree\Plugin\Form\HostedFields\PaymentMethodAddForm",
  *   },
   ...
 ```
 
 #### Validating payment details
- The `$payment_details` array that's passed into the method contains all credit card information collected from the *Payment Information* form. The expected keys are payment gateway specific and usually match the `Drupal\commerce_payment\PluginForm\PaymentMethodAddForm` form elements.
+ The `$payment_details` array that's passed into the method contains all credit card information collected from the *Payment Information* form. The expected keys are payment gateway specific and usually match the `Drupal\commerce_payment\Plugin\Form\PaymentMethodAddForm` form elements.
 
  The *payment details* keys should be validated at the start of your `createPaymentMethod` implementation. For example:
 
@@ -174,7 +174,7 @@ The  `SupportsUpdatingStoredPaymentMethodsInterface` defines `updatePaymentMetho
 This method is called from the *Payment methods* tab of a user's account. It is responsible for updating a saved payment method both on the Drupal Commerce site and in the gateway customer records. The default payment method edit form only supports updating billing info and the card expiration date.
 
 #### Customizing the payment method edit form
-When a payment gateway implements the `SupportsUpdatingStoredPaymentMethodsInterface` interface, the `PaymentMethodEditForm` is used for collecting all information required for editing the payment method. You can create your own payment method add form by extending `Drupal\commerce_payment\PluginForm\PaymentMethodEditForm` with your own `Drupal\my_custom_gateway\PluginForm\PaymentMethodEditForm` class. In your payment gateway plugin annotation, you will need to include your custom form as the `edit-payment-method` form.
+When a payment gateway implements the `SupportsUpdatingStoredPaymentMethodsInterface` interface, the `PaymentMethodEditForm` is used for collecting all information required for editing the payment method. You can create your own payment method add form by extending `Drupal\commerce_payment\Plugin\Form\PaymentMethodEditForm` with your own `Drupal\my_custom_gateway\Plugin\Form\PaymentMethodEditForm` class. In your payment gateway plugin annotation, you will need to include your custom form as the `edit-payment-method` form.
 
 #### Example `updatePaymentMethod` implementation
 
@@ -207,7 +207,7 @@ public function updatePaymentMethod(PaymentMethodInterface $payment_method) {
 ```
 
 #### Exception handling for `updatePaymentMethod`
-Just as in `createPaymentMethod`, if an exception is thrown by `updatePaymentMethod`, that error message is hidden from the customer, for security reasons. The actual error message is logged, but a more generic message is displayed to the customer. Here is the code in ` Drupal\commerce_payment\PluginForm\PaymentMethodEditForm` that handles the `updatePaymentMethod` exceptions:
+Just as in `createPaymentMethod`, if an exception is thrown by `updatePaymentMethod`, that error message is hidden from the customer, for security reasons. The actual error message is logged, but a more generic message is displayed to the customer. Here is the code in ` Drupal\commerce_payment\Plugin\Form\PaymentMethodEditForm` that handles the `updatePaymentMethod` exceptions:
 
 ```php
 try {
